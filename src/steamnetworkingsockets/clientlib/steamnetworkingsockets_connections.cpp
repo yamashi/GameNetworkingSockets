@@ -1832,6 +1832,7 @@ void CSteamNetworkConnectionBase::SetUserData( int64 nUserData )
 
 void CConnectionTransport::TransportConnectionStateChanged( ESteamNetworkingConnectionState eOldState )
 {
+	AssertLocksHeldByCurrentThread();
 }
 
 bool CConnectionTransport::BCanSendEndToEndConnectRequest() const
