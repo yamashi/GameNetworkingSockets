@@ -934,7 +934,7 @@ void CSteamNetworkConnectionBase::SetPollGroup( CSteamNetworkPollGroup *pPollGro
 
 bool CSteamNetworkConnectionBase::BInitConnection( SteamNetworkingMicroseconds usecNow, int nOptions, const SteamNetworkingConfigValue_t *pOptions, SteamDatagramErrMsg &errMsg )
 {
-	AssertLocksHeldByCurrentThread();
+	AssertLocksHeldByCurrentThread( "Base::BInitConnection" );
 
 	// Should only be called while we are in the initial state
 	Assert( GetState() == k_ESteamNetworkingConnectionState_None );
@@ -1068,7 +1068,6 @@ bool CSteamNetworkConnectionBase::BSupportsSymmetricMode()
 
 void CSteamNetworkConnectionBase::SetAppName( const char *pszName )
 {
-	m_pLock->AssertHeldByCurrentThread();
 	V_strcpy_safe( m_szAppName, pszName ? pszName : "" );
 
 	// Re-calculate description
@@ -1077,7 +1076,7 @@ void CSteamNetworkConnectionBase::SetAppName( const char *pszName )
 
 void CSteamNetworkConnectionBase::SetDescription()
 {
-	m_pLock->AssertHeldByCurrentThread();
+	AssertLocksHeldByCurrentThread(); // Yes, we need the global lock, too, because the description is often accessed while holding the global lock, but not the connection lock
 
 	ConnectionTypeDescription_t szTypeDescription;
 	GetConnectionTypeDescription( szTypeDescription );
