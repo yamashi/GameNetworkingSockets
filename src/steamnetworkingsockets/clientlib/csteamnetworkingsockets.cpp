@@ -448,7 +448,10 @@ void CSteamNetworkingSockets::KillConnections()
 	{
 		CSteamNetworkConnectionBase *pConn = g_mapConnections[idx];
 		if ( pConn->m_pSteamNetworkingSocketsInterface == this )
+		{
+			ConnectionScopeLock connectionLock( *pConn );
 			pConn->ConnectionQueueDestroy();
+		}
 	}
 	CSteamNetworkConnectionBase::ProcessDeletionList();
 
