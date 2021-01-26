@@ -738,6 +738,7 @@ static ShortDurationLock s_lockPendingDeleteConnections( "connection_delete_queu
 
 void CSteamNetworkConnectionBase::ConnectionQueueDestroy()
 {
+	AssertLocksHeldByCurrentThread();
 
 	// Make sure all resources have been freed, etc
 	FreeResources();
@@ -2616,6 +2617,8 @@ void CSteamNetworkConnectionBase::PostConnectionStateChangedCallback( ESteamNetw
 
 void CSteamNetworkConnectionBase::ConnectionState_ProblemDetectedLocally( ESteamNetConnectionEnd eReason, const char *pszFmt, ... )
 {
+	AssertLocksHeldByCurrentThread();
+
 	va_list ap;
 
 	SteamNetworkingMicroseconds usecNow = SteamNetworkingSockets_GetLocalTimestamp();
@@ -3186,6 +3189,8 @@ SteamNetworkingMicroseconds CSteamNetworkConnectionBase::ThinkConnection_ClientC
 
 void CSteamNetworkConnectionBase::ConnectionTimedOut( SteamNetworkingMicroseconds usecNow )
 {
+	AssertLocksHeldByCurrentThread();
+
 	ESteamNetConnectionEnd nReasonCode;
 	ConnectionEndDebugMsg msg;
 
